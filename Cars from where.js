@@ -11,49 +11,26 @@ function getTownCodeByName(townName){
     return townCode[townName];
 };
 
-// Function to get unique car models from an array of cars
-function getCarModels(cars){
-const carModel=[]; // Array to store unique car models
-
-// Loop through all cars in the array
-for (let car of cars) {
-  // If the car model is not already in the array, add it
-  if (!carModel.includes(car.model)) {
-    carModel.push(car.model);
-  }
-};
-return carModel;
-};
-
-// Function to get unique town codes from an array of cars
-function getTown(cars){
-const townRegistration=[]; // Array to store unique town codes
-
-// Loop through all cars in the array
-for(let car of cars){
-  // Extract the town code from the registration number
-  let townCode=car.reg_number.split(" ")[0];
-  // If the town code is not already in the array, add it
-  if(!townRegistration.includes(townCode)){
-    townRegistration.push(townCode);
-  };
-};
-return townRegistration;
+// Function to get an array of unique values of a specified feature from an array of cars
+function getUnique(cars, feature){
+    // Create a new Set object by mapping over the input array of cars and extracting the value 
+    // of the specified feature from each car object using the provided 'feature' string as the key.
+    // Using a Set ensures that only unique values of the feature are included in the final result
+    // Store the unique feature values in a new Set object called 'carFeature'
+    const carFeature=new Set(cars.map(car => car[feature]));  
+    
+    // Convert the Set object back into an array using the spread operator
+    // and return the resulting array of unique feature values
+    return [...carFeature];
+   
 };
 
 // This function returns the make of the most popular car in the array
 function mostPopularCar(cars) {
-let carMakers = []; // Array to store unique car makes
+let carMakers = getUnique(cars, 'make');
 let most_popularCar; // String to store the make of the most popular car
 let numberOfmostPopularCar = 0; // Number to store the frequency of the most popular car
 let numberOfCarMade = 0; // Number to store the frequency of the current car make
-
-// Loop through all cars in the array to get the unique car makes
-for (let car of cars) {
-  if (!carMakers.includes(car.make)) {
-    carMakers.push(car.make);
-  }
-};
 
 // Loop through all unique car makes to find the most popular one
 for (let modelIndex = 0; modelIndex <carMakers.length; modelIndex++) {
@@ -99,7 +76,7 @@ function mostBlueCars(cars){
   let NumberOfBlueCars=0; // Number to store the frequency of blue cars in each town
   let most_blueCars=0; // Number to store the frequency of blue cars in the town with the most blue cars
   let townWithMostBlueCars; // String to store the town code of the town with the most blue cars
-  const townRegistration=getTown(cars); // Get an array of unique town codes from the registration numbers in the array
+  const townRegistration=getUnique(cars, 'reg_number'); // Get an array of unique town codes from the registration numbers in the array
 
   // Loop through all unique town codes to count the blue cars in each town
   for(let townCode of townRegistration){
@@ -126,7 +103,7 @@ function mostBlueCars(cars){
 function fewestOrangeCars(cars){
   
   // Get an array of unique town codes from the registration numbers
-  let townRegistration=getTown(cars);
+  let townRegistration=getUnique(cars,'reg_number');
   
   // Initialize variables to keep track of the number of orange cars and the town with the fewest orange cars
   let NumberOfOrangeCars=0;
@@ -164,7 +141,7 @@ function fewestOrangeCars(cars){
 // Function to find the most popular car model overall
 function mostPopularModel(cars) {
 
-const carModel = getCarModels(cars); // Get an array of all car models
+const carModel = getUnique(cars, 'model'); // Get an array of all car models
 let most_popularModel; // Variable to store the most popular car model
 let numberOfmostPopularModel = 0; // Variable to keep track of the number of cars with the most popular model
 let numberOfCarModel = 0; // Variable to keep track of the number of cars with the current model
@@ -193,7 +170,7 @@ return most_popularModel;
 
 // Function to find the most popular car model with registration number starting with 'CL'
 function mostPopularCL(cars) {
-const carModel = getCarModels(cars); // Get an array of all car models
+const carModel =getUnique(cars, 'model'); // Get an array of all car models
 let most_popularModel; // Variable to store the most popular car model
 let numberOfmostPopularModel = 0; // Variable to keep track of the number of cars with the most popular model
 let numberOfCarModel = 0; // Variable to keep track of the number of cars with the current model
@@ -222,7 +199,7 @@ return most_popularModel;
 // Returns the least popular car model that has a registration number starting with "CF"
 function leastPopularCF(cars) {
 // Get an array of all the car models in the dataset
-const carModel = getCarModels(cars); 
+const carModel = getUnique(cars, 'model'); 
 let least_popularModel; 
 let numberOfleastPopularModel = cars.length; 
 let numberOfCarModel = 0; 
